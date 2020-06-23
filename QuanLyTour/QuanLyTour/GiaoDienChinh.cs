@@ -102,7 +102,8 @@ namespace QuanLyTour
 
         private void quảnLýLịchTrìnhToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form frm_LichTrinh = new frmLichTrinh();
+            //Form frm_LichTrinh = new frmLichTrinh();
+            Form frm_LichTrinh = new frmQLLichTrinh();
             frm_LichTrinh.ShowDialog();
         }
     }

@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChiTietLichTrinh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChiTietLichTrinh.Designer.cs">
+      <DependentUpon>ChiTietLichTrinh.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmDaiLy.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +94,12 @@
     <Compile Include="frmPhuongTien.Designer.cs">
       <DependentUpon>frmPhuongTien.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmQLLichTrinh.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmQLLichTrinh.Designer.cs">
+      <DependentUpon>frmQLLichTrinh.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmVe.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +131,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuanLyTourDataSet.xsd</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ChiTietLichTrinh.resx">
+      <DependentUpon>ChiTietLichTrinh.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmDaiLy.resx">
       <DependentUpon>frmDaiLy.cs</DependentUpon>
     </EmbeddedResource>
@@ -139,6 +154,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmPhuongTien.resx">
       <DependentUpon>frmPhuongTien.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmQLLichTrinh.resx">
+      <DependentUpon>frmQLLichTrinh.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmVe.resx">
       <DependentUpon>frmVe.cs</DependentUpon>
