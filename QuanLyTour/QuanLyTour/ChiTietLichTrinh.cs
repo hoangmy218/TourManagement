@@ -24,39 +24,275 @@ namespace QuanLyTour
         SqlCommand cmd = null;
         //Đối tượng đưa dữ liệu vào DataTable dtLT = null;
         SqlDataAdapter daLT = null, daTour = null, daDiaDanh = null, daKhachHang = null, daPhuongTien = null, daKhachSan = null;
-        String sqlstr;
+        String sqlstr, gio;
         DateTime ngay;
+        int madd = 0, mapt = 0;
+
+        private Boolean kiemTraTrungLich()
+        {
+            sqlstr = "Select * from lichtrinh " +
+                            "where matour=@matour and ngayo=@ngayo and madd=@madd";
+            cmd = new SqlCommand(sqlstr, conn);
+            cmd.Parameters.AddWithValue("@matour", this.matour);
+            cmd.Parameters.AddWithValue("@madd", cboDiaDanh.SelectedValue);
+            cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
+            SqlDataReader dr = cmd.ExecuteReader();
+            if (dr.HasRows)
+            {
+                MessageBox.Show("Lịch trình bị trùng!");
+                dr.Close();
+                return true; //trung
+            }
+            else
+            {
+                dr.Close();
+
+            }
+            return false; //khong trung
+        }
+
         private void btnLuu_Click(object sender, EventArgs e)
         {
+            
             if (Them)
             {
                 try
                 {
-                    sqlstr = "Insert into lichtrinh values( @matour, @ngayo, @madd, @mapt, @gio);";
-                    cmd = new SqlCommand(sqlstr, conn);
-                    cmd.Parameters.AddWithValue("@matour", this.matour);
-                    cmd.Parameters.AddWithValue("@madd", cboDiaDanh.SelectedValue);
-                    cmd.Parameters.AddWithValue("@mapt", cboPhuongTien.SelectedValue);
-                    cmd.Parameters.AddWithValue("@gio", dtpGio.Value);
-                    //String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
-                    //DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
-                    cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
-                    String sql = "matour: " + this.matour +
-                        " madd " + cboDiaDanh.SelectedValue +
-                        " mapt " + cboPhuongTien.SelectedValue +
-                        " gio " + dtpGio.Value.ToShortTimeString() +
-                        " ngayo " + this.ngay.Date;
-                    MessageBox.Show(sql);
-                    cmd.ExecuteNonQuery();
-                    MessageBox.Show("Thêm lịch trình thành công!");
-                   
-                    Them = false;
+                    if (!kiemTraTrungLich())
+                    {
+
+                        sqlstr = "Insert into lichtrinh values( @matour, @ngayo, @madd, @mapt, @gio);";
+                        cmd = new SqlCommand(sqlstr, conn);
+                        cmd.Parameters.AddWithValue("@matour", this.matour);
+                        cmd.Parameters.AddWithValue("@madd", cboDiaDanh.SelectedValue);
+                        cmd.Parameters.AddWithValue("@mapt", cboPhuongTien.SelectedValue);
+                        cmd.Parameters.AddWithValue("@gio", dtpGio.Value);
+                        //String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+                        //DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+                        cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
+                        String sql = "matour: " + this.matour +
+                            " madd " + cboDiaDanh.SelectedValue +
+                            " mapt " + cboPhuongTien.SelectedValue +
+                            " gio " + dtpGio.Value.ToShortTimeString() +
+                            " ngayo " + this.ngay.Date;
+                        // MessageBox.Show(sql);
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Thêm lịch trình thành công!");
+
+                        Them = false;
+                        this.Close();
+                    }
+                    
                 }
                 catch (SqlException ex)
                 {
-                    MessageBox.Show("Lỗi thêm lịch trình!"+ex.Message + ex.StackTrace);
+                    //MessageBox.Show("Lịch trình bị trùng!");
                 }
             }
+            if (Sua)
+            {
+                if (gio == dtpGio.Value.ToShortTimeString())
+                {
+                    if (madd != Convert.ToInt32(cboDiaDanh.SelectedValue))
+                    {
+                        if (!kiemTraTrungLich())
+                        {
+                            try
+                            {
+                                sqlstr = "Update lichtrinh set madd=@madd, mapt=@mapt " +
+                                    "where matour=@matour and ngayo=@ngayo and gio=@gio";
+                                cmd = new SqlCommand(sqlstr, conn);
+                                cmd.Parameters.AddWithValue("@matour", this.matour);
+                                cmd.Parameters.AddWithValue("@madd", cboDiaDanh.SelectedValue);
+                                cmd.Parameters.AddWithValue("@mapt", cboPhuongTien.SelectedValue);
+                                cmd.Parameters.AddWithValue("@gio", gio);
+                                //String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+                                //DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+                                cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
+                                String sql = "matour: " + this.matour +
+                                    " madd " + cboDiaDanh.SelectedValue +
+                                    " mapt " + cboPhuongTien.SelectedValue +
+                                    " gio " + dtpGio.Value.ToShortTimeString() +
+                                    " ngayo " + this.ngay.Date;
+                                //  MessageBox.Show(sql);
+                                cmd.ExecuteNonQuery();
+                                MessageBox.Show("Sửa lịch trình thành công!");
+
+                                Sua = false;
+                                this.Close();
+                            }
+                            catch (SqlException ex)
+                            {
+                                MessageBox.Show("Lỗi sửa lịch trình!" + ex.Message + ex.StackTrace);
+                            }
+                        }
+                        else
+                        {
+                            try
+                            {
+
+
+                                sqlstr = "Update lichtrinh set madd=@madd, mapt=@mapt " +
+                                    "where matour=@matour and ngayo=@ngayo and gio=@gio";
+                                cmd = new SqlCommand(sqlstr, conn);
+                                cmd.Parameters.AddWithValue("@matour", this.matour);
+                                cmd.Parameters.AddWithValue("@madd", cboDiaDanh.SelectedValue);
+                                cmd.Parameters.AddWithValue("@mapt", cboPhuongTien.SelectedValue);
+                                cmd.Parameters.AddWithValue("@gio", gio);
+                                //String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+                                //DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+                                cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
+                                String sql = "matour: " + this.matour +
+                                    " madd " + cboDiaDanh.SelectedValue +
+                                    " mapt " + cboPhuongTien.SelectedValue +
+                                    " gio " + dtpGio.Value.ToShortTimeString() +
+                                    " ngayo " + this.ngay.Date;
+                                //  MessageBox.Show(sql);
+                                cmd.ExecuteNonQuery();
+                                MessageBox.Show("Sửa lịch trình thành công!");
+
+                                Sua = false;
+                                this.Close();
+                            }
+                            catch (SqlException ex)
+                            {
+                                MessageBox.Show("Lỗi sửa lịch trình!" + ex.Message + ex.StackTrace);
+                            }
+                        }
+                    }         
+                }
+                else
+                {
+                    // MessageBox.Show("Đổi time");
+                    if (madd != Convert.ToInt32(cboDiaDanh.SelectedValue))
+                    {
+                        if (!kiemTraTrungLich())
+                        {
+
+                            try
+                            {
+                                sqlstr = "Delete from lichtrinh where matour = @matour and ngayo = @ngayo and gio = @gio";
+                                cmd = new SqlCommand(sqlstr, conn);
+                                cmd.Parameters.AddWithValue("@matour", this.matour);
+                                cmd.Parameters.AddWithValue("@madd", cboDiaDanh.SelectedValue);
+                                cmd.Parameters.AddWithValue("@mapt", cboPhuongTien.SelectedValue);
+                                cmd.Parameters.AddWithValue("@gio", gio);
+                                //String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+                                //DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+                                cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
+                                cmd.ExecuteNonQuery();
+
+                                gio = "" + dtpGio.Value.ToShortTimeString();
+                                string gio_lt = "" + dtpGio.Value.ToShortTimeString();
+                                sqlstr = "Select * from lichtrinh " +
+                                            "where matour=@matour and ngayo=@ngayo and gio=@gio and madd=@madd";
+                                cmd = new SqlCommand(sqlstr, conn);
+                                cmd.Parameters.AddWithValue("@matour", this.matour);
+                                cmd.Parameters.AddWithValue("@madd", cboDiaDanh.SelectedValue);
+                                cmd.Parameters.AddWithValue("@gio", gio);
+                                cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
+                                SqlDataReader dr = cmd.ExecuteReader();
+                                if (dr.HasRows)
+                                {
+                                    MessageBox.Show("Lịch trình bị trùng!");
+                                    dr.Close();
+                                    return;
+                                }
+                                dr.Close();
+                                sqlstr = "Insert into lichtrinh values( @matour, @ngayo, @madd, @mapt, @gio);";
+                                cmd = new SqlCommand(sqlstr, conn);
+                                cmd.Parameters.AddWithValue("@matour", this.matour);
+                                cmd.Parameters.AddWithValue("@madd", cboDiaDanh.SelectedValue);
+                                cmd.Parameters.AddWithValue("@mapt", cboPhuongTien.SelectedValue);
+                                cmd.Parameters.AddWithValue("@gio", dtpGio.Value);
+                                //String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+                                //DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+                                cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
+                                String sql = "matour: " + this.matour +
+                                    " madd " + cboDiaDanh.SelectedValue +
+                                    " mapt " + cboPhuongTien.SelectedValue +
+                                    " gio " + dtpGio.Value.ToShortTimeString() +
+                                    " ngayo " + this.ngay.Date;
+                                //  MessageBox.Show(sql);
+                                cmd.ExecuteNonQuery();
+                                MessageBox.Show("Sửa lịch trình thành công!");
+
+                                Sua = false;
+                                this.Close();
+                            }
+                            catch (SqlException ex)
+                            {
+                                MessageBox.Show("Lỗi sửa lịch trình!" + ex.Message + ex.StackTrace);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        try
+                        {
+                            sqlstr = "Delete from lichtrinh where matour = @matour and ngayo = @ngayo and gio = @gio";
+                            cmd = new SqlCommand(sqlstr, conn);
+                            cmd.Parameters.AddWithValue("@matour", this.matour);
+                            cmd.Parameters.AddWithValue("@madd", cboDiaDanh.SelectedValue);
+                            cmd.Parameters.AddWithValue("@mapt", cboPhuongTien.SelectedValue);
+                            cmd.Parameters.AddWithValue("@gio", gio);
+                            //String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+                            //DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+                            cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
+                            cmd.ExecuteNonQuery();
+
+                            gio = "" + dtpGio.Value.ToShortTimeString();
+                            string gio_lt = "" + dtpGio.Value.ToShortTimeString();
+                            sqlstr = "Select * from lichtrinh " +
+                                        "where matour=@matour and ngayo=@ngayo and gio=@gio and madd=@madd";
+                            cmd = new SqlCommand(sqlstr, conn);
+                            cmd.Parameters.AddWithValue("@matour", this.matour);
+                            cmd.Parameters.AddWithValue("@madd", cboDiaDanh.SelectedValue);
+                            cmd.Parameters.AddWithValue("@gio", gio);
+                            cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
+                            SqlDataReader dr = cmd.ExecuteReader();
+                            if (dr.HasRows)
+                            {
+                                MessageBox.Show("Lịch trình bị trùng!");
+                                dr.Close();
+                                return;
+                            }
+                            dr.Close();
+                            sqlstr = "Insert into lichtrinh values( @matour, @ngayo, @madd, @mapt, @gio);";
+                            cmd = new SqlCommand(sqlstr, conn);
+                            cmd.Parameters.AddWithValue("@matour", this.matour);
+                            cmd.Parameters.AddWithValue("@madd", cboDiaDanh.SelectedValue);
+                            cmd.Parameters.AddWithValue("@mapt", cboPhuongTien.SelectedValue);
+                            cmd.Parameters.AddWithValue("@gio", dtpGio.Value);
+                            //String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+                            //DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+                            cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
+                            String sql = "matour: " + this.matour +
+                                " madd " + cboDiaDanh.SelectedValue +
+                                " mapt " + cboPhuongTien.SelectedValue +
+                                " gio " + dtpGio.Value.ToShortTimeString() +
+                                " ngayo " + this.ngay.Date;
+                            //  MessageBox.Show(sql);
+                            cmd.ExecuteNonQuery();
+                            MessageBox.Show("Sửa lịch trình thành công!");
+
+                            Sua = false;
+                            this.Close();
+                        }
+                        catch (SqlException ex)
+                        {
+                            MessageBox.Show("Lỗi sửa lịch trình!" + ex.Message + ex.StackTrace);
+                        }
+                    }
+                }
+                
+                
+            }
+        }
+
+        private void cboDiaDanh_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
         //Đối tượng hiển thị dữ liệu lên Form
@@ -87,6 +323,10 @@ namespace QuanLyTour
                 this.cboDiaDanh.DataSource = dtDiaDanh;
                 this.cboDiaDanh.DisplayMember = "tendd";
                 this.cboDiaDanh.ValueMember = "madd";
+                if (madd != 0)
+                {
+                    this.cboDiaDanh.SelectedValue = madd;
+                }
 
                 // Vận chuyển dữ liệu lên DataTable dtThanhPho
                 daPhuongTien = new SqlDataAdapter("SELECT * FROM phuongtien", conn);
@@ -96,10 +336,15 @@ namespace QuanLyTour
                 this.cboPhuongTien.DataSource = dtPhuongTien;
                 this.cboPhuongTien.DisplayMember = "tenpt";
                 this.cboPhuongTien.ValueMember = "mapt";
+                if (mapt != 0)
+                {
+                    this.cboPhuongTien.SelectedValue = mapt;
+                }
+
             }
             catch(SqlException ex)
             {
-                MessageBox.Show(ex.Message + ex.StackTrace);
+               // MessageBox.Show(ex.Message + ex.StackTrace);
             }
         }
 
@@ -117,12 +362,65 @@ namespace QuanLyTour
 
         public void setThemChiTietLichTrinh(String matourlt, DateTime ngaylt)
         {
+            Them = true;
             this.matour = matourlt;
             txtMatour.Text = matourlt;
             txtNgay.Text = "" + ngaylt.Date;
             this.ngay = ngaylt;
             MessageBox.Show("matour: " + matourlt + " ngay: " + ngaylt.Date);
            
+        }
+
+        public void setSuaChiTietLichTrinh(String matourlt, DateTime ngaylt, String giolt)
+        {
+            
+            Sua = true;
+            this.matour = matourlt;
+            txtMatour.Text = matourlt;
+            txtNgay.Text = "" + ngaylt.Date;
+            this.ngay = ngaylt;
+            this.gio = giolt;
+            
+            MessageBox.Show("matour: " + matourlt + " ngay: " + ngaylt.Date + " gio: "+giolt);
+            try
+            {
+                if (conn == null)
+                {
+                    conn = new SqlConnection(strConnectionString);
+                    conn.Open();
+                }
+                if (conn != null && conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                LoadData();
+                sqlstr = "Select * from lichtrinh where matour=@matour and ngayo=@ngayo and gio= @gio;";
+                cmd = new SqlCommand(sqlstr, conn);
+                cmd.Parameters.AddWithValue("@matour", this.matour);
+                cmd.Parameters.AddWithValue("@gio", giolt);
+                cmd.Parameters.AddWithValue("@ngayo", this.ngay.Date);
+                
+                String sql = "matour: " + this.matour +
+                    " gio " + this.gio +
+                    " ngayo " + this.ngay.Date;
+                //MessageBox.Show(sql);
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows)
+                {
+                    dr.Read();
+                    dtpGio.Value = Convert.ToDateTime(dr["gio"].ToString());
+                    madd = Convert.ToInt32(dr["madd"].ToString());
+                    mapt = Convert.ToInt32(dr["mapt"].ToString());
+                    /*MessageBox.Show("madd: " + Convert.ToInt32(dr["madd"].ToString()) +
+                        "mapt: " + Convert.ToInt32(dr["mapt"].ToString()));*/
+                }
+                dr.Close();
+            }
+            catch (SqlException ex)
+            {
+                //MessageBox.Show(ex.Message + ex.StackTrace);
+            }
+            
         }
 
         private void ChiTietLichTrinh_FormClosing(object sender, FormClosingEventArgs e)

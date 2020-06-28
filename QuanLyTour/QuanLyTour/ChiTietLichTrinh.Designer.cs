@@ -106,6 +106,7 @@
             this.cboDiaDanh.Name = "cboDiaDanh";
             this.cboDiaDanh.Size = new System.Drawing.Size(200, 21);
             this.cboDiaDanh.TabIndex = 6;
+            this.cboDiaDanh.SelectedIndexChanged += new System.EventHandler(this.cboDiaDanh_SelectedIndexChanged);
             // 
             // cboPhuongTien
             // 

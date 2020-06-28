@@ -62,7 +62,7 @@ namespace QuanLyTour
                     bool result = Int32.TryParse(cboTenTour.SelectedValue.ToString(), out matour);
                     if (result)
                     {
-                        MessageBox.Show("matour: " + matour.ToString());
+                        //MessageBox.Show("matour: " + matour.ToString());
                         try
                         {
                             sqlstr = "Select matour, ngaykh, ngayve, diemxp, diemden, nhanvien.tennv, phuongtien.tenpt, tentour " +
@@ -85,7 +85,7 @@ namespace QuanLyTour
 
                                     DateTime ngaykh = drtour.GetDateTime(1).Date;
                                     DateTime ngayve = drtour.GetDateTime(2).Date;
-                                    MessageBox.Show(" SelectedChange Ngay kh" + drtour.GetDateTime(1).Date + " Ngày về " + drtour.GetDateTime(2).Date + " So ngay " + soNgay);
+                                    //MessageBox.Show(" SelectedChange Ngay kh" + drtour.GetDateTime(1).Date + " Ngày về " + drtour.GetDateTime(2).Date + " So ngay " + soNgay);
                                     // Add items in the ComboBox
                                     //mybox.Items.Add("C#");
                                     //ComboBox cboNgayDL = new ComboBox();
@@ -274,8 +274,8 @@ namespace QuanLyTour
                 this.btnThem.Enabled = true;
                         this.btnSua.Enabled = true;
                         // Không cho thao tác trên các nút Xóa / Lưu / Hủy / Grb Thông tin
-                        this.btnLuu.Enabled = false;
-                        this.btnHuy.Enabled = false;
+                        //this.btnLuu.Enabled = false;
+                        //this.btnHuy.Enabled = false;
                 this.btnXoa.Enabled = true;
                         //this.grbKhachSan.Enabled = false;
 
@@ -325,7 +325,7 @@ namespace QuanLyTour
                     String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
                     DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
                     cmd.Parameters.AddWithValue("@ngayo", oDate.Date);
-                    MessageBox.Show("ngay: " + oDate.Date);
+                    //MessageBox.Show("ngay: " + oDate.Date);
                     cmd.ExecuteNonQuery();
                     MessageBox.Show("Cập nhật khách sạn thành công!");
                     TaiLenKhachSan();
@@ -379,19 +379,70 @@ namespace QuanLyTour
 
         private void btnSua_Click(object sender, EventArgs e)
         {
-            if (frmCTLT == null)
+            try
             {
-                frmCTLT = new ChiTietLichTrinh();
+                int r = dgvLT.CurrentCell.RowIndex;
+                
+                if (frmCTLT == null)
+                {
+                    frmCTLT = new ChiTietLichTrinh();
 
+                }
+                frmCTLT.frmQLLT = this;
+                frmCTLT.setTextLabel("Sửa lịch trình");
+                String gio = dgvLT.Rows[r].Cells["gio"].Value.ToString();
+                String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+                DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+                String matour = "" + cboTenTour.SelectedValue;
+                frmCTLT.setSuaChiTietLichTrinh(matour, oDate, gio);
+                frmCTLT.ShowDialog();
+                TaiLenLichTrinh();
             }
-            frmCTLT.frmQLLT = this;
-            frmCTLT.setTextLabel("Sửa lịch trình");
-            frmCTLT.ShowDialog();
+            catch (SqlException ex)
+            {
+                
+            }
         }
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnXoa_Click(object sender, EventArgs e)
+        {
+           
+            Xoa = true;
+            try
+            {
+                int r = dgvLT.CurrentCell.RowIndex;
+                DialogResult xacnhan_xoa = MessageBox.Show("Bạn có chắc chắn muốn xóa lịch trình này?",
+                    "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (xacnhan_xoa == DialogResult.Yes)
+                {                           
+                    sqlstr = "Delete from lichtrinh where matour = @matour and ngayo = @ngayo and gio = @gio";
+                    cmd = new SqlCommand(sqlstr, conn);
+                    String gio = dgvLT.Rows[r].Cells["gio"].Value.ToString();
+                    String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+                    DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+                    String matour = "" + cboTenTour.SelectedValue;
+                    cmd.Parameters.AddWithValue("@matour", matour);
+                    cmd.Parameters.AddWithValue("@gio", gio);      
+                    cmd.Parameters.AddWithValue("@ngayo", oDate.Date);
+                    cmd.ExecuteNonQuery();
+                    
+                    TaiLenLichTrinh();
+                    MessageBox.Show("Đã xóa lịch trình thành công!");
+
+                }
+
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Lỗi! " + ex.Message + ex.StackTrace);
+            }
+            Xoa = false;
+           
         }
 
         private void btnThemKS_Click(object sender, EventArgs e)
@@ -452,7 +503,7 @@ namespace QuanLyTour
                 bool result = Int32.TryParse(cboTenTour.SelectedValue.ToString(), out matour);
                 if (result)
                 {
-                    MessageBox.Show("matour: " + matour.ToString());
+                   // MessageBox.Show("matour: " + matour.ToString());
                     try
                     {
                         sqlstr = "Select matour, ngaykh, ngayve, diemxp, diemden, nhanvien.tennv, phuongtien.tenpt, tentour " +
@@ -474,7 +525,7 @@ namespace QuanLyTour
 
                                 DateTime ngaykh = drtour.GetDateTime(1).Date;
                                 DateTime ngayve = drtour.GetDateTime(2).Date;
-                                MessageBox.Show(" SelectedChange Ngay kh" + drtour.GetDateTime(1).Date + " Ngày về " + drtour.GetDateTime(2).Date + " So ngay " + soNgay);
+                                //MessageBox.Show(" SelectedChange Ngay kh" + drtour.GetDateTime(1).Date + " Ngày về " + drtour.GetDateTime(2).Date + " So ngay " + soNgay);
                                 // Add items in the ComboBox
                                 //mybox.Items.Add("C#");
                                 //ComboBox cboNgayDL = new ComboBox();
@@ -634,8 +685,8 @@ namespace QuanLyTour
                 this.btnTroVe.Enabled = true;
                 //Không cho thao tác trên các nút Xóa/ Lưu / Hủy / Grb Thông tin
                 this.btnXoa.Enabled = false;
-                this.btnLuu.Enabled = false;
-                this.btnHuy.Enabled = false;
+                //this.btnLuu.Enabled = false;
+                //this.btnHuy.Enabled = false;
                
                 //conn.Close();
 

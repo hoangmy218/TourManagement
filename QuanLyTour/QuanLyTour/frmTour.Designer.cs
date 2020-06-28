@@ -43,11 +43,14 @@
             this.cboPhuongTien = new System.Windows.Forms.ComboBox();
             this.label9 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.nudGiaTE = new System.Windows.Forms.NumericUpDown();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
+            this.nudGiaNL = new System.Windows.Forms.NumericUpDown();
             this.dtpNgayKT = new System.Windows.Forms.DateTimePicker();
             this.dtpNgayBD = new System.Windows.Forms.DateTimePicker();
-            this.nudGiaNL = new System.Windows.Forms.NumericUpDown();
             this.nudMaTour = new System.Windows.Forms.NumericUpDown();
             this.cbHDV = new System.Windows.Forms.ComboBox();
             this.txtHDV = new System.Windows.Forms.Label();
@@ -59,9 +62,6 @@
             this.btnTroVe = new System.Windows.Forms.Button();
             this.matour = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvTour = new System.Windows.Forms.DataGridView();
-            this.nudGiaTE = new System.Windows.Forms.NumericUpDown();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
             this.matour1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tentour1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Ngaykh = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -72,10 +72,10 @@
             this.mapt = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.grBThongTin.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGiaTE)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGiaNL)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaTour)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTour)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGiaTE)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -233,6 +233,47 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Loại vé";
             // 
+            // nudGiaTE
+            // 
+            this.nudGiaTE.Location = new System.Drawing.Point(131, 60);
+            this.nudGiaTE.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudGiaTE.Minimum = new decimal(new int[] {
+            50000,
+            0,
+            0,
+            0});
+            this.nudGiaTE.Name = "nudGiaTE";
+            this.nudGiaTE.Size = new System.Drawing.Size(120, 20);
+            this.nudGiaTE.TabIndex = 21;
+            this.nudGiaTE.Value = new decimal(new int[] {
+            50000,
+            0,
+            0,
+            0});
+            this.nudGiaTE.ValueChanged += new System.EventHandler(this.nudGiaTE_ValueChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(101, 64);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(23, 13);
+            this.label12.TabIndex = 19;
+            this.label12.Text = "Giá";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(257, 64);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(30, 13);
+            this.label13.TabIndex = 20;
+            this.label13.Text = "VND";
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -251,26 +292,6 @@
             this.label8.Size = new System.Drawing.Size(52, 13);
             this.label8.TabIndex = 18;
             this.label8.Text = "Vé trẻ em";
-            // 
-            // dtpNgayKT
-            // 
-            this.dtpNgayKT.CustomFormat = "hh:mm tt dd-MM-yyyy";
-            this.dtpNgayKT.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpNgayKT.Location = new System.Drawing.Point(332, 73);
-            this.dtpNgayKT.Name = "dtpNgayKT";
-            this.dtpNgayKT.Size = new System.Drawing.Size(143, 20);
-            this.dtpNgayKT.TabIndex = 16;
-            this.dtpNgayKT.ValueChanged += new System.EventHandler(this.dtpNgayKT_ValueChanged);
-            // 
-            // dtpNgayBD
-            // 
-            this.dtpNgayBD.CustomFormat = "hh:mm tt dd-MM-yyyy ";
-            this.dtpNgayBD.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpNgayBD.Location = new System.Drawing.Point(334, 22);
-            this.dtpNgayBD.Name = "dtpNgayBD";
-            this.dtpNgayBD.Size = new System.Drawing.Size(141, 20);
-            this.dtpNgayBD.TabIndex = 15;
-            this.dtpNgayBD.ValueChanged += new System.EventHandler(this.dtpNgayBD_ValueChanged);
             // 
             // nudGiaNL
             // 
@@ -294,6 +315,26 @@
             0,
             0});
             this.nudGiaNL.ValueChanged += new System.EventHandler(this.nudGia_ValueChanged);
+            // 
+            // dtpNgayKT
+            // 
+            this.dtpNgayKT.CustomFormat = "hh:mm tt dd-MM-yyyy";
+            this.dtpNgayKT.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpNgayKT.Location = new System.Drawing.Point(332, 73);
+            this.dtpNgayKT.Name = "dtpNgayKT";
+            this.dtpNgayKT.Size = new System.Drawing.Size(143, 20);
+            this.dtpNgayKT.TabIndex = 16;
+            this.dtpNgayKT.ValueChanged += new System.EventHandler(this.dtpNgayKT_ValueChanged);
+            // 
+            // dtpNgayBD
+            // 
+            this.dtpNgayBD.CustomFormat = "hh:mm tt dd-MM-yyyy ";
+            this.dtpNgayBD.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpNgayBD.Location = new System.Drawing.Point(334, 22);
+            this.dtpNgayBD.Name = "dtpNgayBD";
+            this.dtpNgayBD.Size = new System.Drawing.Size(141, 20);
+            this.dtpNgayBD.TabIndex = 15;
+            this.dtpNgayBD.ValueChanged += new System.EventHandler(this.dtpNgayBD_ValueChanged);
             // 
             // nudMaTour
             // 
@@ -406,47 +447,7 @@
             this.dgvTour.Size = new System.Drawing.Size(865, 150);
             this.dgvTour.TabIndex = 20;
             this.dgvTour.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTour_CellClick_1);
-            // 
-            // nudGiaTE
-            // 
-            this.nudGiaTE.Location = new System.Drawing.Point(131, 60);
-            this.nudGiaTE.Maximum = new decimal(new int[] {
-            100000000,
-            0,
-            0,
-            0});
-            this.nudGiaTE.Minimum = new decimal(new int[] {
-            50000,
-            0,
-            0,
-            0});
-            this.nudGiaTE.Name = "nudGiaTE";
-            this.nudGiaTE.Size = new System.Drawing.Size(120, 20);
-            this.nudGiaTE.TabIndex = 21;
-            this.nudGiaTE.Value = new decimal(new int[] {
-            50000,
-            0,
-            0,
-            0});
-            this.nudGiaTE.ValueChanged += new System.EventHandler(this.nudGiaTE_ValueChanged);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(101, 64);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(23, 13);
-            this.label12.TabIndex = 19;
-            this.label12.Text = "Giá";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(257, 64);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(30, 13);
-            this.label13.TabIndex = 20;
-            this.label13.Text = "VND";
+            this.dgvTour.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTour_CellContentClick_1);
             // 
             // matour1
             // 
@@ -524,10 +525,10 @@
             this.grBThongTin.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGiaTE)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGiaNL)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaTour)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTour)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGiaTE)).EndInit();
             this.ResumeLayout(false);
 
         }
