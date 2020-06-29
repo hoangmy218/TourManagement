@@ -74,6 +74,8 @@
             this.btnHuyKS = new System.Windows.Forms.Button();
             this.btnLuuKS = new System.Windows.Forms.Button();
             this.btnThemKS = new System.Windows.Forms.Button();
+            this.btnPDF = new System.Windows.Forms.Button();
+            this.btnPDFAll = new System.Windows.Forms.Button();
             this.grbLichTrinh.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLT)).BeginInit();
             this.grbLocTour.SuspendLayout();
@@ -110,6 +112,7 @@
             // 
             // grbLichTrinh
             // 
+            this.grbLichTrinh.Controls.Add(this.btnPDF);
             this.grbLichTrinh.Controls.Add(this.btnSua);
             this.grbLichTrinh.Controls.Add(this.dgvLT);
             this.grbLichTrinh.Controls.Add(this.btnTaiLai);
@@ -124,7 +127,7 @@
             // 
             // btnSua
             // 
-            this.btnSua.Location = new System.Drawing.Point(391, 270);
+            this.btnSua.Location = new System.Drawing.Point(308, 270);
             this.btnSua.Name = "btnSua";
             this.btnSua.Size = new System.Drawing.Size(75, 23);
             this.btnSua.TabIndex = 38;
@@ -141,7 +144,7 @@
             this.mapt});
             this.dgvLT.Location = new System.Drawing.Point(9, 31);
             this.dgvLT.Name = "dgvLT";
-            this.dgvLT.Size = new System.Drawing.Size(750, 170);
+            this.dgvLT.Size = new System.Drawing.Size(750, 217);
             this.dgvLT.TabIndex = 27;
             // 
             // gio
@@ -172,7 +175,7 @@
             // 
             // btnTaiLai
             // 
-            this.btnTaiLai.Location = new System.Drawing.Point(204, 270);
+            this.btnTaiLai.Location = new System.Drawing.Point(121, 270);
             this.btnTaiLai.Name = "btnTaiLai";
             this.btnTaiLai.Size = new System.Drawing.Size(75, 23);
             this.btnTaiLai.TabIndex = 32;
@@ -182,7 +185,7 @@
             // 
             // btnXoa
             // 
-            this.btnXoa.Location = new System.Drawing.Point(482, 270);
+            this.btnXoa.Location = new System.Drawing.Point(399, 270);
             this.btnXoa.Name = "btnXoa";
             this.btnXoa.Size = new System.Drawing.Size(75, 23);
             this.btnXoa.TabIndex = 34;
@@ -192,7 +195,7 @@
             // 
             // btnThem
             // 
-            this.btnThem.Location = new System.Drawing.Point(302, 270);
+            this.btnThem.Location = new System.Drawing.Point(219, 270);
             this.btnThem.Name = "btnThem";
             this.btnThem.Size = new System.Drawing.Size(75, 23);
             this.btnThem.TabIndex = 33;
@@ -544,11 +547,32 @@
             this.btnThemKS.UseVisualStyleBackColor = true;
             this.btnThemKS.Click += new System.EventHandler(this.btnThemKS_Click);
             // 
+            // btnPDF
+            // 
+            this.btnPDF.Location = new System.Drawing.Point(484, 270);
+            this.btnPDF.Name = "btnPDF";
+            this.btnPDF.Size = new System.Drawing.Size(184, 23);
+            this.btnPDF.TabIndex = 42;
+            this.btnPDF.Text = "Xuất 1 ngày lịch trình sang PDF";
+            this.btnPDF.UseVisualStyleBackColor = true;
+            this.btnPDF.Click += new System.EventHandler(this.btnPDF_Click);
+            // 
+            // btnPDFAll
+            // 
+            this.btnPDFAll.Location = new System.Drawing.Point(553, 678);
+            this.btnPDFAll.Name = "btnPDFAll";
+            this.btnPDFAll.Size = new System.Drawing.Size(137, 23);
+            this.btnPDFAll.TabIndex = 42;
+            this.btnPDFAll.Text = "Xuất tất cả sang PDF";
+            this.btnPDFAll.UseVisualStyleBackColor = true;
+            this.btnPDFAll.Click += new System.EventHandler(this.btnPDFAll_Click);
+            // 
             // frmQLLichTrinh
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(899, 725);
+            this.Controls.Add(this.btnPDFAll);
             this.Controls.Add(this.grbLichTrinh);
             this.Controls.Add(this.grbLocTour);
             this.Controls.Add(this.grbThongTinTour);
@@ -617,5 +641,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn gio;
         private System.Windows.Forms.DataGridViewComboBoxColumn madd;
         private System.Windows.Forms.DataGridViewComboBoxColumn mapt;
+        private System.Windows.Forms.Button btnPDF;
+        private System.Windows.Forms.Button btnPDFAll;
     }
 }

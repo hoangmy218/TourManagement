@@ -34,5 +34,10 @@ namespace QuanLyTour
                 this.txtTentk.Focus();
             }
         }
+
+        private void DangNhap_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

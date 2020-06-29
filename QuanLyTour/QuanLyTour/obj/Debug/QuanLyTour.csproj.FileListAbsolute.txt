@@ -40,3 +40,6 @@ E:\Study\NET\workspace\TourManagement\QuanLyTour\QuanLyTour\obj\Debug\QuanLyTour
 E:\Study\NET\workspace\TourManagement\QuanLyTour\QuanLyTour\obj\Debug\QuanLyTour.pdb
 E:\Study\NET\workspace\TourManagement\QuanLyTour\QuanLyTour\obj\Debug\QuanLyTour.frmQLLichTrinh.resources
 E:\Study\NET\workspace\TourManagement\QuanLyTour\QuanLyTour\obj\Debug\QuanLyTour.ChiTietLichTrinh.resources
+E:\Study\NET\workspace\TourManagement\QuanLyTour\QuanLyTour\bin\Debug\itextsharp.dll
+E:\Study\NET\workspace\TourManagement\QuanLyTour\QuanLyTour\bin\Debug\itextsharp.xml
+E:\Study\NET\workspace\TourManagement\QuanLyTour\QuanLyTour\obj\Debug\QuanLyTour.csproj.CopyComplete

@@ -9,6 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using System.IO;
+using iTextSharp;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+
+
+
 namespace QuanLyTour
 {
     public partial class frmQLLichTrinh : Form
@@ -28,6 +35,8 @@ namespace QuanLyTour
         //Đối tượng hiển thị dữ liệu lên Form
         DataTable dtLT = null, dtTour = null, dtKhachSan = null, dtPhuongTien = null, dtDiaDanh = null;
         ChiTietLichTrinh frmCTLT;
+        String tentour;
+        int matour;
         private void btnHuy_Click(object sender, EventArgs e)
         {
             cboTenTour.SelectedIndex = 0;
@@ -58,7 +67,7 @@ namespace QuanLyTour
                 if (cboTenTour.SelectedItem != null)
                 {
                     
-                    int matour;
+                   
                     bool result = Int32.TryParse(cboTenTour.SelectedValue.ToString(), out matour);
                     if (result)
                     {
@@ -260,6 +269,7 @@ namespace QuanLyTour
         {
             try
             {
+                
                 String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
                 DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
                 sqlstr = "Select gio, madd, mapt from lichtrinh where matour= @matour and ngayo= @ngayo order by gio asc";
@@ -443,6 +453,491 @@ namespace QuanLyTour
             }
             Xoa = false;
            
+        }
+
+        private void btnPDF_Click(object sender, EventArgs e)
+        {
+            tentour = cboTenTour.Text;
+            Document pdoc = new Document(PageSize.A4, 20f, 20f, 30f, 30f);
+
+            PdfWriter pWriter = PdfWriter.GetInstance(pdoc, new FileStream("E:\\Download\\" + tentour + ".pdf", FileMode.Create));
+
+            pdoc.Open();
+
+            //Full path to the Unicode Arial file
+            string ARIALUNI_TFF = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIALUNI.TTF");
+
+            //Create a base font object making sure to specify IDENTITY-H
+            BaseFont bf = BaseFont.CreateFont(ARIALUNI_TFF, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+
+            //Create a specific font object
+            iTextSharp.text.Font f1 = new iTextSharp.text.Font(bf, 20, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.RED);
+            
+            Paragraph pgraph1 = new Paragraph("Lịch trình "+tentour, f1);
+            pgraph1.Alignment = Element.ALIGN_CENTER;
+            pdoc.Add(pgraph1);
+            //Full path to the Unicode Arial file
+            //THONG TIN TOUR
+            iTextSharp.text.Font f3 = new iTextSharp.text.Font(bf, 18, iTextSharp.text.Font.BOLDITALIC, iTextSharp.text.BaseColor.BLUE);
+
+            Paragraph pgraph3 = new Paragraph("THÔNG TIN TOUR ", f3);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph3);
+
+            iTextSharp.text.Font f2 = new iTextSharp.text.Font(bf, 13, iTextSharp.text.Font.NORMAL, iTextSharp.text.BaseColor.BLACK);
+                    
+            Paragraph pgraph_matour = new Paragraph("Mã tour: " + this.txtMaTour.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_matour);
+            Paragraph pgraph_tentour = new Paragraph("Tên tour: " + tentour, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_tentour);
+            Paragraph pgraph_ngaykh = new Paragraph("Ngày khởi hành: " + this.txtNgayKH.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_ngaykh);
+            Paragraph pgraph_ngayve = new Paragraph("Ngày về: " + this.txtNgayVe.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_ngayve);
+            Paragraph pgraph_hdv = new Paragraph("Hướng dẫn viên: " + this.txtHDV.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_hdv);
+            Paragraph pgraph_pt = new Paragraph("Phương tiện: " + this.txtPhuongTien.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_pt);
+            Paragraph pgraph_diemxp = new Paragraph("Điểm xuất phát: " + this.txtDiemXP.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_diemxp);
+            Paragraph pgraph_diemden = new Paragraph("Điểm đến: " + this.txtDiemDen.Text+"\t\n\n", f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_diemden);
+
+            //font loi
+            iTextSharp.text.Font f_loi = new iTextSharp.text.Font(bf, 13, iTextSharp.text.Font.BOLDITALIC, iTextSharp.text.BaseColor.RED);
+           
+            //Create a specific font object
+
+            Paragraph pgraph4 = new Paragraph("CHI TIẾT LỊCH TRÌNH \t\n", f3);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph4);
+
+            iTextSharp.text.Font f_ngay = new iTextSharp.text.Font(bf, 13, iTextSharp.text.Font.BOLDITALIC, iTextSharp.text.BaseColor.BLUE);
+            String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+            DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+            Paragraph pgraph_ngay = new Paragraph("Ngày: "+ngay, f_ngay);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_ngay);
+
+            //KHACHSAN
+
+            try
+            {
+                
+                sqlstr = "Select * from QuanLyTour.dbo.o " +
+                    "join QuanLyTour.dbo.khachsan " +
+                    "on  QuanLyTour.dbo.o.maks = QuanLyTour.dbo.khachsan.maks " +
+                    "where matour= @matour and ngayo= @ngayo;";
+
+                cmd = new SqlCommand(sqlstr, conn);
+                cmd.Parameters.AddWithValue("@matour", cboTenTour.SelectedValue);
+                cmd.Parameters.AddWithValue("@ngayo", oDate.Date);
+
+
+                SqlDataReader drks = cmd.ExecuteReader();
+
+                if (drks.HasRows)
+                {
+                    while (drks.Read())
+                    {
+                        Paragraph pgraph_tenks = new Paragraph("Khách sạn: " + drks["tenks"].ToString() , f2);
+                        pgraph1.Alignment = Element.ALIGN_LEFT;
+                        pdoc.Add(pgraph_tenks);
+                        Paragraph pgraph_diachi = new Paragraph("Địa chỉ: " + drks["diachi"].ToString() , f2);
+                        pgraph1.Alignment = Element.ALIGN_LEFT;
+                        pdoc.Add(pgraph_diachi);
+                        Paragraph pgraph_sdt = new Paragraph("Số điện thoại: " + drks["sdt"].ToString()+"\t\n\n", f2);
+                        pgraph1.Alignment = Element.ALIGN_LEFT;
+                        pdoc.Add(pgraph_sdt);
+
+                    }
+                }
+                else
+                {
+                    Paragraph pgraph_loiks = new Paragraph("Không có khách sạn!\t\n\n", f_loi);
+                    pgraph1.Alignment = Element.ALIGN_LEFT;
+                    pdoc.Add(pgraph_loiks);
+                   
+                    
+                }
+                drks.Close();
+            }
+            catch (SqlException)
+            {
+
+            }
+
+            //TABLE
+            
+            sqlstr = "Select gio, tendd, tenpt from QuanLyTour.dbo.lichtrinh " +
+                                           " join QuanLyTour.dbo.diadanh" +
+                                            " on QuanLyTour.dbo.lichtrinh.madd = QuanLyTour.dbo.diadanh.madd " +
+                                            " join QuanLyTour.dbo.phuongtien" +
+                                            " on QuanLyTour.dbo.lichtrinh.mapt = QuanLyTour.dbo.phuongtien.mapt " +
+                " where matour= @matour and ngayo= @ngayo order by gio asc";
+            SqlDataAdapter daLTPdf = new SqlDataAdapter(sqlstr, conn);
+            daLTPdf.SelectCommand.Parameters.AddWithValue("@matour", cboTenTour.SelectedValue);
+            daLTPdf.SelectCommand.Parameters.AddWithValue("@ngayo", oDate.Date);
+            DataTable dtLTPdf = new DataTable();
+            dtLTPdf.Clear();
+            daLTPdf.Fill(dtLTPdf);
+            PdfPTable table = new PdfPTable(dtLTPdf.Columns.Count);
+            table.WidthPercentage = 100;
+            if (dtLTPdf.Rows.Count == 0)
+            {
+                Paragraph pgraph_loiks = new Paragraph("Không có lịch trình!\t\n\n", f_loi);
+                pgraph1.Alignment = Element.ALIGN_LEFT;
+                pdoc.Add(pgraph_loiks);
+            }
+            else
+            {
+                //Set columns names in the pdf file
+                string[] tencot = new string[] {"Giờ", "Địa danh", "Phương tiện"};
+                    for (int k = 0; k < dtLTPdf.Columns.Count; k++)
+                {
+                    
+                    PdfPCell cell = new PdfPCell(new Phrase(tencot[k], f2));
+
+                    cell.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+                    cell.VerticalAlignment = PdfPCell.ALIGN_CENTER;                   
+                    cell.BackgroundColor = new iTextSharp.text.BaseColor(115, 195, 108);
+
+                    table.AddCell(cell);
+                }
+            
+
+
+
+                //Add values of DataTable in pdf file
+                for (int i = 0; i < dtLTPdf.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dtLTPdf.Columns.Count; j++)
+                    {
+                        PdfPCell cell = new PdfPCell(new Phrase(dtLTPdf.Rows[i][j].ToString(), f2));
+
+                        //Align the cell in the center
+                        cell.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+                        cell.VerticalAlignment = PdfPCell.ALIGN_CENTER;
+
+                        table.AddCell(cell);
+                    }
+                }
+            }
+
+            pdoc.Add(table);
+
+            pdoc.Close();
+
+        }
+
+        private void btnPDFAll_Click(object sender, EventArgs e)
+        {
+            tentour = cboTenTour.Text;
+            Document pdoc = new Document(PageSize.A4, 20f, 20f, 30f, 30f);
+
+            PdfWriter pWriter = PdfWriter.GetInstance(pdoc, new FileStream("E:\\Download\\" + tentour + ".pdf", FileMode.Create));
+
+            pdoc.Open();
+
+            //Full path to the Unicode Arial file
+            string ARIALUNI_TFF = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIALUNI.TTF");
+
+            //Create a base font object making sure to specify IDENTITY-H
+            BaseFont bf = BaseFont.CreateFont(ARIALUNI_TFF, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+
+            //Create a specific font object
+            iTextSharp.text.Font f1 = new iTextSharp.text.Font(bf, 20, iTextSharp.text.Font.BOLD, iTextSharp.text.BaseColor.RED);
+
+            Paragraph pgraph1 = new Paragraph("Lịch trình " + tentour, f1);
+            pgraph1.Alignment = Element.ALIGN_CENTER;
+            pdoc.Add(pgraph1);
+            //Full path to the Unicode Arial file
+            //THONG TIN TOUR
+            iTextSharp.text.Font f3 = new iTextSharp.text.Font(bf, 18, iTextSharp.text.Font.BOLDITALIC, iTextSharp.text.BaseColor.BLUE);
+
+            Paragraph pgraph3 = new Paragraph("THÔNG TIN TOUR ", f3);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph3);
+
+            iTextSharp.text.Font f2 = new iTextSharp.text.Font(bf, 13, iTextSharp.text.Font.NORMAL, iTextSharp.text.BaseColor.BLACK);
+
+            Paragraph pgraph_matour = new Paragraph("Mã tour: " + this.txtMaTour.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_matour);
+            Paragraph pgraph_tentour = new Paragraph("Tên tour: " + tentour, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_tentour);
+            Paragraph pgraph_ngaykh = new Paragraph("Ngày khởi hành: " + this.txtNgayKH.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_ngaykh);
+            Paragraph pgraph_ngayve = new Paragraph("Ngày về: " + this.txtNgayVe.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_ngayve);
+            Paragraph pgraph_hdv = new Paragraph("Hướng dẫn viên: " + this.txtHDV.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_hdv);
+            Paragraph pgraph_pt = new Paragraph("Phương tiện: " + this.txtPhuongTien.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_pt);
+            Paragraph pgraph_diemxp = new Paragraph("Điểm xuất phát: " + this.txtDiemXP.Text, f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_diemxp);
+            Paragraph pgraph_diemden = new Paragraph("Điểm đến: " + this.txtDiemDen.Text + "\t\n\n", f2);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_diemden);
+
+            //font loi
+            iTextSharp.text.Font f_loi = new iTextSharp.text.Font(bf, 13, iTextSharp.text.Font.BOLDITALIC, iTextSharp.text.BaseColor.RED);
+
+            //Create a specific font object
+
+            Paragraph pgraph4 = new Paragraph("CHI TIẾT LỊCH TRÌNH \t\n", f3);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph4);
+
+            iTextSharp.text.Font f_ngay = new iTextSharp.text.Font(bf, 13, iTextSharp.text.Font.BOLDITALIC, iTextSharp.text.BaseColor.BLUE);
+            for (int y = 0; y< cboNgay.Items.Count; y++)
+            {
+                String ngayi = "" + (cboNgay.Items[y] as dynamic).Value;
+               
+                DateTime oDate = DateTime.ParseExact(ngayi, "dd/M/yyyy", null);
+                Paragraph pgraph_ngay = new Paragraph("Ngày: " + ngayi, f_ngay);
+                pgraph1.Alignment = Element.ALIGN_LEFT;
+                pdoc.Add(pgraph_ngay);
+
+                //KHACHSAN
+
+                try
+                {
+
+                    sqlstr = "Select * from QuanLyTour.dbo.o " +
+                        "join QuanLyTour.dbo.khachsan " +
+                        "on  QuanLyTour.dbo.o.maks = QuanLyTour.dbo.khachsan.maks " +
+                        "where matour= @matour and ngayo= @ngayo;";
+
+                    cmd = new SqlCommand(sqlstr, conn);
+                    cmd.Parameters.AddWithValue("@matour", cboTenTour.SelectedValue);
+                    cmd.Parameters.AddWithValue("@ngayo", oDate.Date);
+
+
+                    SqlDataReader drks = cmd.ExecuteReader();
+
+                    if (drks.HasRows)
+                    {
+                        while (drks.Read())
+                        {
+                            Paragraph pgraph_tenks = new Paragraph("Khách sạn: " + drks["tenks"].ToString(), f2);
+                            pgraph1.Alignment = Element.ALIGN_LEFT;
+                            pdoc.Add(pgraph_tenks);
+                            Paragraph pgraph_diachi = new Paragraph("Địa chỉ: " + drks["diachi"].ToString(), f2);
+                            pgraph1.Alignment = Element.ALIGN_LEFT;
+                            pdoc.Add(pgraph_diachi);
+                            Paragraph pgraph_sdt = new Paragraph("Số điện thoại: " + drks["sdt"].ToString() + "\t\n\n", f2);
+                            pgraph1.Alignment = Element.ALIGN_LEFT;
+                            pdoc.Add(pgraph_sdt);
+
+                        }
+                    }
+                    else
+                    {
+                        Paragraph pgraph_loiks = new Paragraph("Không có khách sạn!\t\n\n", f_loi);
+                        pgraph1.Alignment = Element.ALIGN_LEFT;
+                        pdoc.Add(pgraph_loiks);
+
+
+                    }
+                    drks.Close();
+                }
+                catch (SqlException)
+                {
+
+                }
+
+                //TABLE
+
+                sqlstr = "Select gio, tendd, tenpt from QuanLyTour.dbo.lichtrinh " +
+                                               " join QuanLyTour.dbo.diadanh" +
+                                                " on QuanLyTour.dbo.lichtrinh.madd = QuanLyTour.dbo.diadanh.madd " +
+                                                " join QuanLyTour.dbo.phuongtien" +
+                                                " on QuanLyTour.dbo.lichtrinh.mapt = QuanLyTour.dbo.phuongtien.mapt " +
+                    " where matour= @matour and ngayo= @ngayo order by gio asc";
+                SqlDataAdapter daLTPdf = new SqlDataAdapter(sqlstr, conn);
+                daLTPdf.SelectCommand.Parameters.AddWithValue("@matour", cboTenTour.SelectedValue);
+                daLTPdf.SelectCommand.Parameters.AddWithValue("@ngayo", oDate.Date);
+                DataTable dtLTPdf = new DataTable();
+                dtLTPdf.Clear();
+                daLTPdf.Fill(dtLTPdf);
+                PdfPTable table = new PdfPTable(dtLTPdf.Columns.Count);
+                table.WidthPercentage = 100;
+                if (dtLTPdf.Rows.Count == 0)
+                {
+                    Paragraph pgraph_loiks = new Paragraph("Không có lịch trình!\t\n\n", f_loi);
+                    pgraph1.Alignment = Element.ALIGN_LEFT;
+                    pdoc.Add(pgraph_loiks);
+                }
+                else
+                {
+                    //Set columns names in the pdf file
+                    string[] tencot = new string[] { "Giờ", "Địa danh", "Phương tiện" };
+                    for (int k = 0; k < dtLTPdf.Columns.Count; k++)
+                    {
+
+                        PdfPCell cell = new PdfPCell(new Phrase(tencot[k], f2));
+
+                        cell.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+                        cell.VerticalAlignment = PdfPCell.ALIGN_CENTER;
+                        cell.BackgroundColor = new iTextSharp.text.BaseColor(115, 195, 108);
+
+                        table.AddCell(cell);
+                    }
+
+
+
+
+                    //Add values of DataTable in pdf file
+                    for (int i = 0; i < dtLTPdf.Rows.Count; i++)
+                    {
+                        for (int j = 0; j < dtLTPdf.Columns.Count; j++)
+                        {
+                            PdfPCell cell = new PdfPCell(new Phrase(dtLTPdf.Rows[i][j].ToString(), f2));
+
+                            //Align the cell in the center
+                            cell.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+                            cell.VerticalAlignment = PdfPCell.ALIGN_CENTER;
+
+                            table.AddCell(cell);
+                        }
+                    }
+                }
+
+                pdoc.Add(table);
+                Paragraph pgraph_space = new Paragraph("\t\n\n", f_ngay);
+                pgraph1.Alignment = Element.ALIGN_LEFT;
+                pdoc.Add(pgraph_space);
+            }
+            
+            /*String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+            DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+            Paragraph pgraph_ngay = new Paragraph("Ngày: " + ngay, f_ngay);
+            pgraph1.Alignment = Element.ALIGN_LEFT;
+            pdoc.Add(pgraph_ngay);
+
+            //KHACHSAN
+
+            try
+            {
+
+                sqlstr = "Select * from QuanLyTour.dbo.o " +
+                    "join QuanLyTour.dbo.khachsan " +
+                    "on  QuanLyTour.dbo.o.maks = QuanLyTour.dbo.khachsan.maks " +
+                    "where matour= @matour and ngayo= @ngayo;";
+
+                cmd = new SqlCommand(sqlstr, conn);
+                cmd.Parameters.AddWithValue("@matour", cboTenTour.SelectedValue);
+                cmd.Parameters.AddWithValue("@ngayo", oDate.Date);
+
+
+                SqlDataReader drks = cmd.ExecuteReader();
+
+                if (drks.HasRows)
+                {
+                    while (drks.Read())
+                    {
+                        Paragraph pgraph_tenks = new Paragraph("Khách sạn: " + drks["tenks"].ToString(), f2);
+                        pgraph1.Alignment = Element.ALIGN_LEFT;
+                        pdoc.Add(pgraph_tenks);
+                        Paragraph pgraph_diachi = new Paragraph("Địa chỉ: " + drks["diachi"].ToString(), f2);
+                        pgraph1.Alignment = Element.ALIGN_LEFT;
+                        pdoc.Add(pgraph_diachi);
+                        Paragraph pgraph_sdt = new Paragraph("Số điện thoại: " + drks["sdt"].ToString() + "\t\n\n", f2);
+                        pgraph1.Alignment = Element.ALIGN_LEFT;
+                        pdoc.Add(pgraph_sdt);
+
+                    }
+                }
+                else
+                {
+                    Paragraph pgraph_loiks = new Paragraph("Không có khách sạn!\t\n\n", f_loi);
+                    pgraph1.Alignment = Element.ALIGN_LEFT;
+                    pdoc.Add(pgraph_loiks);
+
+
+                }
+                drks.Close();
+            }
+            catch (SqlException)
+            {
+
+            }
+
+            //TABLE
+
+            sqlstr = "Select gio, tendd, tenpt from QuanLyTour.dbo.lichtrinh " +
+                                           " join QuanLyTour.dbo.diadanh" +
+                                            " on QuanLyTour.dbo.lichtrinh.madd = QuanLyTour.dbo.diadanh.madd " +
+                                            " join QuanLyTour.dbo.phuongtien" +
+                                            " on QuanLyTour.dbo.lichtrinh.mapt = QuanLyTour.dbo.phuongtien.mapt " +
+                " where matour= @matour and ngayo= @ngayo order by gio asc";
+            SqlDataAdapter daLTPdf = new SqlDataAdapter(sqlstr, conn);
+            daLTPdf.SelectCommand.Parameters.AddWithValue("@matour", cboTenTour.SelectedValue);
+            daLTPdf.SelectCommand.Parameters.AddWithValue("@ngayo", oDate.Date);
+            DataTable dtLTPdf = new DataTable();
+            dtLTPdf.Clear();
+            daLTPdf.Fill(dtLTPdf);
+            PdfPTable table = new PdfPTable(dtLTPdf.Columns.Count);
+            table.WidthPercentage = 100;
+            if (dtLTPdf.Rows.Count == 0)
+            {
+                Paragraph pgraph_loiks = new Paragraph("Không có lịch trình!\t\n\n", f_loi);
+                pgraph1.Alignment = Element.ALIGN_LEFT;
+                pdoc.Add(pgraph_loiks);
+            }
+            else
+            {
+                //Set columns names in the pdf file
+                string[] tencot = new string[] { "Giờ", "Địa danh", "Phương tiện" };
+                for (int k = 0; k < dtLTPdf.Columns.Count; k++)
+                {
+
+                    PdfPCell cell = new PdfPCell(new Phrase(tencot[k], f2));
+
+                    cell.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+                    cell.VerticalAlignment = PdfPCell.ALIGN_CENTER;
+                    cell.BackgroundColor = new iTextSharp.text.BaseColor(115, 195, 108);
+
+                    table.AddCell(cell);
+                }
+
+
+
+
+                //Add values of DataTable in pdf file
+                for (int i = 0; i < dtLTPdf.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dtLTPdf.Columns.Count; j++)
+                    {
+                        PdfPCell cell = new PdfPCell(new Phrase(dtLTPdf.Rows[i][j].ToString(), f2));
+
+                        //Align the cell in the center
+                        cell.HorizontalAlignment = PdfPCell.ALIGN_CENTER;
+                        cell.VerticalAlignment = PdfPCell.ALIGN_CENTER;
+
+                        table.AddCell(cell);
+                    }
+                }
+            }
+
+            pdoc.Add(table);*/
+
+            pdoc.Close();
         }
 
         private void btnThemKS_Click(object sender, EventArgs e)
