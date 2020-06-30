@@ -36,7 +36,7 @@ namespace QuanLyTour
         String tenTour, sqlstr;
         int  mahdv;
         Decimal updMatour, updGiatour;
-        
+        DateTime NgayBD, NgayKT;
 
         
 
@@ -306,13 +306,69 @@ namespace QuanLyTour
                 }
                 catch (SqlException ex)
                 {
-                    MessageBox.Show("Lỗi! " + ex.Message + ex.StackTrace);
+                    //MessageBox.Show("Lỗi! " + ex.Message + ex.StackTrace);
                 }
                 
                 Them = false;
             }
-            else
+            else //sua
             {
+                //int r = dgvTour.CurrentCell.RowIndex;
+                String matour_xoa = nudMaTour.Value.ToString();
+                if ((dtpNgayBD.Value.Date - NgayBD.Date).TotalDays > 0)
+                {
+                    //MessageBox.Show("Ngày BD mới dời đến "+ (dtpNgayBD.Value.Date - NgayBD.Date).TotalDays+" ngày sau!");
+                    for (double i = 0; i< (dtpNgayBD.Value.Date - NgayBD.Date).TotalDays; i++)
+                    {
+                        try
+                        {
+                           // MessageBox.Show("" + NgayBD.Date.AddDays(i));
+                            sqlstr = "Delete from lichtrinh where matour=@matour and ngayo=@ngayo";
+                            cmd = new SqlCommand(sqlstr, conn);
+                            cmd.Parameters.AddWithValue("@matour", matour_xoa);
+                            cmd.Parameters.AddWithValue("@ngayo", NgayBD.Date.AddDays(i));
+                            cmd.ExecuteNonQuery();
+                            sqlstr = "Delete from o where matour=@matour and ngayo=@ngayo";
+                            cmd = new SqlCommand(sqlstr, conn);
+                            cmd.Parameters.AddWithValue("@matour", matour_xoa);
+                            cmd.Parameters.AddWithValue("@ngayo", NgayBD.Date.AddDays(i));
+                            cmd.ExecuteNonQuery();
+
+                           // MessageBox.Show("Đã xóa lịch trình thành công!");
+                        }
+                        catch (SqlException ex)
+                        {
+                           // MessageBox.Show(ex.Message + ex.StackTrace);
+                        }
+                    }
+                }
+                if ((NgayKT.Date - dtpNgayKT.Value.Date).TotalDays > 0)
+                {
+                    //MessageBox.Show("Ngày KT mới dời về " + (NgayKT.Date - dtpNgayKT.Value.Date).TotalDays + " ngày trước!");
+                    for (double i = 0; i < (NgayKT.Date - dtpNgayKT.Value.Date).TotalDays; i++)
+                    {    
+                        try
+                        {
+                            //MessageBox.Show("" + NgayKT.Date.AddDays(-i));
+                            sqlstr = "Delete from lichtrinh where matour=@matour and ngayo=@ngayo";
+                            cmd = new SqlCommand(sqlstr, conn);
+                            cmd.Parameters.AddWithValue("@matour", matour_xoa);
+                            cmd.Parameters.AddWithValue("@ngayo", NgayKT.Date.AddDays(-i));
+                            cmd.ExecuteNonQuery();
+                            sqlstr = "Delete from o where matour=@matour and ngayo=@ngayo";
+                            cmd = new SqlCommand(sqlstr, conn);
+                            cmd.Parameters.AddWithValue("@matour", matour_xoa);
+                            cmd.Parameters.AddWithValue("@ngayo", NgayKT.Date.AddDays(-i));
+                            cmd.ExecuteNonQuery();
+
+                            //MessageBox.Show("Đã xóa lịch trình thành công!");
+                        }
+                        catch (SqlException ex)
+                        {
+                            //MessageBox.Show(ex.Message + ex.StackTrace);
+                        }
+                    }
+                }
                 try
                 {
                     sqlstr = "Update tour set tentour= @tentour, ngaykh= @ngaykh, ngayve= @ngayve, manv= @manv, diemxp= @diemxp, diemden= @diemden, mapt= @mapt where matour= @matour";
@@ -406,7 +462,9 @@ namespace QuanLyTour
                     nudMaTour.Value = Convert.ToInt32(row.Cells["matour1"].Value.ToString());
                     txtTenTour.Text = row.Cells["tentour1"].Value.ToString();
                     dtpNgayBD.Value = Convert.ToDateTime(row.Cells["ngaykh"].Value.ToString());
+                    NgayBD = Convert.ToDateTime(row.Cells["ngaykh"].Value.ToString());
                     dtpNgayKT.Value = Convert.ToDateTime(row.Cells["ngayve"].Value.ToString());
+                    NgayKT = Convert.ToDateTime(row.Cells["ngayve"].Value.ToString());
                     txtDiemden.Text = row.Cells["diemden"].Value.ToString();
                     txtDiemxp.Text = row.Cells["diemxp"].Value.ToString();
                     cbHDV.SelectedValue = Convert.ToInt32(row.Cells["manv"].Value.ToString());
@@ -481,14 +539,22 @@ namespace QuanLyTour
                 {
                     int r = dgvTour.CurrentCell.RowIndex;
                     String matour_xoa = dgvTour.Rows[r].Cells["matour1"].Value.ToString();
+                    sqlstr = "Delete from giave where matour=" + matour_xoa;
+                    cmd = new SqlCommand(sqlstr, conn);
+                    cmd.ExecuteNonQuery();
+                    
+                    sqlstr = "Delete from lichtrinh where matour=" + matour_xoa;
+                    cmd = new SqlCommand(sqlstr, conn);
+                    cmd.ExecuteNonQuery();
+                    sqlstr = "Delete from o where matour=" + matour_xoa;
+                    cmd = new SqlCommand(sqlstr, conn);
+                    cmd.ExecuteNonQuery();
                     sqlstr = "Delete from Tour where matour=" + matour_xoa;
                     cmd = new SqlCommand(sqlstr, conn);
                     cmd.ExecuteNonQuery();
-                    sqlstr = "Delete from giave where matour=" + matour_xoa;
                     LoadData();
                     ResetField();
                     MessageBox.Show("Đã xóa tour thành công!");
-                    
                 }
 
             }

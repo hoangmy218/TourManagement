@@ -367,7 +367,7 @@ namespace QuanLyTour
             txtMatour.Text = matourlt;
             txtNgay.Text = "" + ngaylt.Date;
             this.ngay = ngaylt;
-            MessageBox.Show("matour: " + matourlt + " ngay: " + ngaylt.Date);
+           // MessageBox.Show("matour: " + matourlt + " ngay: " + ngaylt.Date);
            
         }
 
@@ -381,7 +381,7 @@ namespace QuanLyTour
             this.ngay = ngaylt;
             this.gio = giolt;
             
-            MessageBox.Show("matour: " + matourlt + " ngay: " + ngaylt.Date + " gio: "+giolt);
+            //MessageBox.Show("matour: " + matourlt + " ngay: " + ngaylt.Date + " gio: "+giolt);
             try
             {
                 if (conn == null)
