@@ -32,6 +32,7 @@
             this.txtSdt = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.grbLichTrinh = new System.Windows.Forms.GroupBox();
+            this.btnPDF = new System.Windows.Forms.Button();
             this.btnSua = new System.Windows.Forms.Button();
             this.dgvLT = new System.Windows.Forms.DataGridView();
             this.gio = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -74,8 +75,8 @@
             this.btnHuyKS = new System.Windows.Forms.Button();
             this.btnLuuKS = new System.Windows.Forms.Button();
             this.btnThemKS = new System.Windows.Forms.Button();
-            this.btnPDF = new System.Windows.Forms.Button();
             this.btnPDFAll = new System.Windows.Forms.Button();
+            this.btnXoaKS = new System.Windows.Forms.Button();
             this.grbLichTrinh.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLT)).BeginInit();
             this.grbLocTour.SuspendLayout();
@@ -124,6 +125,16 @@
             this.grbLichTrinh.TabIndex = 39;
             this.grbLichTrinh.TabStop = false;
             this.grbLichTrinh.Text = "Thiết lập lịch trình";
+            // 
+            // btnPDF
+            // 
+            this.btnPDF.Location = new System.Drawing.Point(484, 270);
+            this.btnPDF.Name = "btnPDF";
+            this.btnPDF.Size = new System.Drawing.Size(184, 23);
+            this.btnPDF.TabIndex = 42;
+            this.btnPDF.Text = "Xuất 1 ngày lịch trình sang PDF";
+            this.btnPDF.UseVisualStyleBackColor = true;
+            this.btnPDF.Click += new System.EventHandler(this.btnPDF_Click);
             // 
             // btnSua
             // 
@@ -488,6 +499,7 @@
             // 
             // grbKhachSan
             // 
+            this.grbKhachSan.Controls.Add(this.btnXoaKS);
             this.grbKhachSan.Controls.Add(this.btnSuaKS);
             this.grbKhachSan.Controls.Add(this.btnHuyKS);
             this.grbKhachSan.Controls.Add(this.btnLuuKS);
@@ -509,7 +521,7 @@
             // 
             // btnSuaKS
             // 
-            this.btnSuaKS.Location = new System.Drawing.Point(189, 152);
+            this.btnSuaKS.Location = new System.Drawing.Point(154, 152);
             this.btnSuaKS.Name = "btnSuaKS";
             this.btnSuaKS.Size = new System.Drawing.Size(75, 23);
             this.btnSuaKS.TabIndex = 40;
@@ -519,7 +531,7 @@
             // 
             // btnHuyKS
             // 
-            this.btnHuyKS.Location = new System.Drawing.Point(189, 192);
+            this.btnHuyKS.Location = new System.Drawing.Point(219, 192);
             this.btnHuyKS.Name = "btnHuyKS";
             this.btnHuyKS.Size = new System.Drawing.Size(75, 23);
             this.btnHuyKS.TabIndex = 39;
@@ -529,7 +541,7 @@
             // 
             // btnLuuKS
             // 
-            this.btnLuuKS.Location = new System.Drawing.Point(57, 192);
+            this.btnLuuKS.Location = new System.Drawing.Point(91, 192);
             this.btnLuuKS.Name = "btnLuuKS";
             this.btnLuuKS.Size = new System.Drawing.Size(75, 23);
             this.btnLuuKS.TabIndex = 38;
@@ -539,23 +551,13 @@
             // 
             // btnThemKS
             // 
-            this.btnThemKS.Location = new System.Drawing.Point(58, 152);
+            this.btnThemKS.Location = new System.Drawing.Point(26, 157);
             this.btnThemKS.Name = "btnThemKS";
             this.btnThemKS.Size = new System.Drawing.Size(75, 23);
             this.btnThemKS.TabIndex = 36;
             this.btnThemKS.Text = "Thêm";
             this.btnThemKS.UseVisualStyleBackColor = true;
             this.btnThemKS.Click += new System.EventHandler(this.btnThemKS_Click);
-            // 
-            // btnPDF
-            // 
-            this.btnPDF.Location = new System.Drawing.Point(484, 270);
-            this.btnPDF.Name = "btnPDF";
-            this.btnPDF.Size = new System.Drawing.Size(184, 23);
-            this.btnPDF.TabIndex = 42;
-            this.btnPDF.Text = "Xuất 1 ngày lịch trình sang PDF";
-            this.btnPDF.UseVisualStyleBackColor = true;
-            this.btnPDF.Click += new System.EventHandler(this.btnPDF_Click);
             // 
             // btnPDFAll
             // 
@@ -566,6 +568,16 @@
             this.btnPDFAll.Text = "Xuất tất cả sang PDF";
             this.btnPDFAll.UseVisualStyleBackColor = true;
             this.btnPDFAll.Click += new System.EventHandler(this.btnPDFAll_Click);
+            // 
+            // btnXoaKS
+            // 
+            this.btnXoaKS.Location = new System.Drawing.Point(285, 152);
+            this.btnXoaKS.Name = "btnXoaKS";
+            this.btnXoaKS.Size = new System.Drawing.Size(75, 23);
+            this.btnXoaKS.TabIndex = 41;
+            this.btnXoaKS.Text = "Xóa";
+            this.btnXoaKS.UseVisualStyleBackColor = true;
+            this.btnXoaKS.Click += new System.EventHandler(this.btnXoaKS_Click);
             // 
             // frmQLLichTrinh
             // 
@@ -643,5 +655,6 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn mapt;
         private System.Windows.Forms.Button btnPDF;
         private System.Windows.Forms.Button btnPDFAll;
+        private System.Windows.Forms.Button btnXoaKS;
     }
 }

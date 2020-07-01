@@ -157,6 +157,18 @@ namespace QuanLyTour
                 MessageBox.Show("Lỗi! " + ex.Message + ex.StackTrace);
             }
         }
+        private String GetMD5(string txt)
+        {
+            String str = "";
+            Byte[] buffer = System.Text.Encoding.UTF8.GetBytes(txt);
+            System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            buffer = md5.ComputeHash(buffer);
+            foreach (Byte b in buffer)
+            {
+                str += b.ToString("X2");
+            }
+            return str;
+        }
 
         private void btnLuu_Click(object sender, EventArgs e)
         {
@@ -169,7 +181,7 @@ namespace QuanLyTour
             if (Them)
             {
                 try
-                { 
+                {
                     sqlstr = "Insert into nhanvien values("
                             + txtManv.Text.ToString() + ",N'"
                             + txtTennv.Text.ToString() + "',N'"
@@ -177,6 +189,8 @@ namespace QuanLyTour
                             + txtDiachi.Text.ToString() + "','"
                             + txtSdt.Text.ToString() + "',"
                             + cboQuyen.SelectedValue.ToString() + ");";
+                            //+txtTentk.Text.ToString() + "','"
+                            //+ GetMD5(txtMK.Text.ToString()) + "');";
                     cmd = new SqlCommand(sqlstr, conn);
                     cmd.ExecuteNonQuery();
                     LoadData();
@@ -199,7 +213,9 @@ namespace QuanLyTour
                         + "gioitinh =N'" + gtinh + "', "
                         + "diachi=N'" + txtDiachi.Text.ToString() + "', "
                         + "sdt='" + txtSdt.Text.ToString() + "', "
-                        + "maquyen=" + cboQuyen.SelectedValue.ToString()
+                        + "maquyen=" + cboQuyen.SelectedValue.ToString()+" "
+                        //+ "tentk='" + txtTentk.Text.ToString() + "', "
+                        //+ "matkhau='" + GetMD5(txtMK.Text.ToString()) + "' "
                         + " where manv=" + txtManv.Text.ToString();
                     cmd = new SqlCommand(sqlstr, conn);
                     cmd.ExecuteNonQuery();

@@ -76,7 +76,7 @@
             this.pnlThongtinnv.Controls.Add(this.label1);
             this.pnlThongtinnv.Location = new System.Drawing.Point(12, 12);
             this.pnlThongtinnv.Name = "pnlThongtinnv";
-            this.pnlThongtinnv.Size = new System.Drawing.Size(776, 117);
+            this.pnlThongtinnv.Size = new System.Drawing.Size(776, 142);
             this.pnlThongtinnv.TabIndex = 0;
             // 
             // cboQuyen

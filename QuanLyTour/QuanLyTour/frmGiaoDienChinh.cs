@@ -12,25 +12,34 @@ namespace QuanLyTour
 {
     public partial class mainForm : Form
     {
+        public DangNhap frmdn;
         public mainForm()
         {
             InitializeComponent();
         }
+        
 
         private void frmDangNhap()
         {
-            Form frm = new DangNhap();
-            frm.ShowDialog();
+            frmdn = new DangNhap();
+            
+            frmdn.ShowDialog();
         }
 
         private void label1_Click(object sender, EventArgs e)
         {
 
         }
+        public void setTextTenDN(String txt)
+        {
+            
+            txtTenDN.Text = txt;
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             frmDangNhap();
+            txtTenDN.Text = frmdn.gettenDN();
         }
 
         private void đăngXuấtToolStripMenuItem_Click(object sender, EventArgs e)

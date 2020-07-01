@@ -109,11 +109,11 @@
     <Compile Include="frmVe.Designer.cs">
       <DependentUpon>frmVe.cs</DependentUpon>
     </Compile>
-    <Compile Include="GiaoDienChinh.cs">
+    <Compile Include="frmGiaoDienChinh.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GiaoDienChinh.Designer.cs">
-      <DependentUpon>GiaoDienChinh.cs</DependentUpon>
+    <Compile Include="frmGiaoDienChinh.Designer.cs">
+      <DependentUpon>frmGiaoDienChinh.cs</DependentUpon>
     </Compile>
     <Compile Include="DangNhap.cs">
       <SubType>Form</SubType>
@@ -164,8 +164,8 @@
     <EmbeddedResource Include="frmVe.resx">
       <DependentUpon>frmVe.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GiaoDienChinh.resx">
-      <DependentUpon>GiaoDienChinh.cs</DependentUpon>
+    <EmbeddedResource Include="frmGiaoDienChinh.resx">
+      <DependentUpon>frmGiaoDienChinh.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DangNhap.resx">
       <DependentUpon>DangNhap.cs</DependentUpon>

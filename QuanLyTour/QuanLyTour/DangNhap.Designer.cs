@@ -114,6 +114,7 @@
             this.Controls.Add(this.grbDangNhap);
             this.Name = "DangNhap";
             this.Text = "Đăng nhập";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DangNhap_FormClosing);
             this.Load += new System.EventHandler(this.DangNhap_Load);
             this.grbDangNhap.ResumeLayout(false);
             this.grbDangNhap.PerformLayout();
@@ -122,13 +123,12 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnDangNhap;
         private System.Windows.Forms.GroupBox grbDangNhap;
         private System.Windows.Forms.Button btnThoat;
         private System.Windows.Forms.TextBox txtMk;
         private System.Windows.Forms.TextBox txtTentk;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Button btnDangNhap;
     }
 }

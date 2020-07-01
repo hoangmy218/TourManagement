@@ -242,6 +242,7 @@ namespace QuanLyTour
                         txtSdt.Text = drks["sdt"].ToString();
                         this.btnThemKS.Enabled = false;
                         this.btnSuaKS.Enabled = true;
+                        this.btnXoaKS.Enabled = true;
                         // Không cho thao tác trên các nút Xóa / Lưu / Hủy / Grb Thông tin
                         this.btnLuuKS.Enabled = false;
                         this.btnHuyKS.Enabled = false;
@@ -253,6 +254,7 @@ namespace QuanLyTour
                 {
                     this.btnSuaKS.Enabled = false;
                     this.btnThemKS.Enabled = true;
+                    this.btnXoaKS.Enabled = false;
                     MessageBox.Show("Chưa thêm khách sạn!");
                     cboKhachSan.SelectedIndex = 0;
                     ResetField_TTKhachSan();
@@ -940,6 +942,34 @@ namespace QuanLyTour
             pdoc.Close();
         }
 
+        private void btnXoaKS_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult xacnhan_xoa = MessageBox.Show("Bạn có chắc chắn muốn xóa khách sạn này khỏi lịch trình?",
+                   "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (xacnhan_xoa == DialogResult.Yes)
+                {
+                    sqlstr = "Delete from o where matour=@matour and maks=@maks and ngayo= @ngayo;";
+                    cmd = new SqlCommand(sqlstr, conn);
+                    cmd.Parameters.AddWithValue("@matour", cboTenTour.SelectedValue);
+                    cmd.Parameters.AddWithValue("@maks", cboKhachSan.SelectedValue);
+                    String ngay = "" + (cboNgay.SelectedItem as dynamic).Value;
+                    DateTime oDate = DateTime.ParseExact(ngay, "dd/M/yyyy", null);
+                    cmd.Parameters.AddWithValue("@ngayo", oDate.Date);
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Xóa khách sạn thành công!");
+                    TaiLenKhachSan();
+                    
+                   
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("Lỗi xóa khách sạn!" + ex.Message + ex.StackTrace);
+            }
+        }
+
         private void btnThemKS_Click(object sender, EventArgs e)
         {
             ThemKs = true;
@@ -947,6 +977,7 @@ namespace QuanLyTour
             this.btnSuaKS.Enabled = false;
             this.btnLuuKS.Enabled = true;
             this.btnThemKS.Enabled = false;
+            this.btnXoaKS.Enabled = false;
         }
 
         private void btnSuaKS_Click(object sender, EventArgs e)
@@ -956,6 +987,7 @@ namespace QuanLyTour
             this.btnThemKS.Enabled = false;
             this.btnSuaKS.Enabled = false;
             this.btnLuuKS.Enabled = true;
+            this.btnXoaKS.Enabled = false;
         }
 
         String tenTour, sqlstr;
